@@ -1,9 +1,12 @@
 -- ============================================================
 -- Bitácora de Entrenamiento · esquema para Supabase
 -- Ejecutar UNA VEZ en el SQL Editor de tu proyecto Supabase.
+-- Es seguro re-ejecutarlo: recrea las funciones con el fix de pgcrypto.
 -- ============================================================
 
-create extension if not exists pgcrypto;
+-- Hashing bcrypt (crypt) proveído por pgcrypto.
+-- Si ya estaba instalado en otro schema, lo deja como está (no falla).
+create extension if not exists pgcrypto with schema public;
 
 -- 1) Contraseña (solo el hash bcrypt). Cambiá 'Ezequiel2014' si algún día querés otra.
 create table if not exists public.app_secrets (
@@ -40,20 +43,43 @@ revoke all on public.app_secrets   from anon, authenticated;
 revoke all on public.app_data      from anon, authenticated;
 revoke all on public.app_sessions  from anon, authenticated;
 
--- 5) Funciones RPC (security definer: solo con la contraseña correcta)
+-- 5) Funciones RPC (security definer: solo con la contraseña correcta).
+--    Las funciones buscan crypt() dinámicamente en cualquier schema donde
+--    viva pgcrypto, así no dependen del search_path del proyecto.
+
+drop function if exists public.app_login(text);
+drop function if exists public.app_load(uuid);
+drop function if exists public.app_save(uuid, jsonb);
+drop function if exists public.app_logout(uuid);
 
 create or replace function public.app_login(p_password text)
 returns uuid
 language plpgsql
 security definer
-set search_path = public
+set search_path = pg_catalog, public
 as $$
 declare
   v_hash text;
+  v_fn text;
+  v_ok boolean;
   v_token uuid;
 begin
   select password_hash into v_hash from public.app_secrets where id = 1;
-  if v_hash is null or crypt(p_password, v_hash) <> v_hash then
+  if v_hash is null then
+    return null;
+  end if;
+  select (n.nspname || '.crypt')
+    into v_fn
+    from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+   where p.proname = 'crypt'
+     and n.nspname not in ('pg_catalog', 'information_schema')
+   limit 1;
+  if v_fn is null then
+    return null;
+  end if;
+  execute format('select (%s($1, $2) = $2)', v_fn) into v_ok using p_password, v_hash;
+  if not v_ok then
     return null;
   end if;
   delete from public.app_sessions where last_used < now() - interval '30 days';
@@ -65,7 +91,7 @@ create or replace function public.app_load(p_token uuid)
 returns jsonb
 language plpgsql
 security definer
-set search_path = public
+set search_path = pg_catalog, public
 as $$
 declare
   v_data jsonb;
@@ -82,7 +108,7 @@ create or replace function public.app_save(p_token uuid, p_data jsonb)
 returns boolean
 language plpgsql
 security definer
-set search_path = public
+set search_path = pg_catalog, public
 as $$
 begin
   if not exists (select 1 from public.app_sessions where token = p_token) then
@@ -100,7 +126,7 @@ create or replace function public.app_logout(p_token uuid)
 returns void
 language plpgsql
 security definer
-set search_path = public
+set search_path = pg_catalog, public
 as $$
 begin
   delete from public.app_sessions where token = p_token;

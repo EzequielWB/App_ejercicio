@@ -19,6 +19,7 @@ export default function Perfil() {
   const [trackFat, setTrackFat] = useState(state.profile.bodyFatPct !== null)
   const [fat, setFat] = useState(state.profile.bodyFatPct ?? 0)
   const [saved, setSaved] = useState(false)
+  const [confirmReset, setConfirmReset] = useState(false)
 
   const imc = weight > 0 && height > 0 ? weight / Math.pow(height / 100, 2) : null
   const hM = height > 0 ? height / 100 : 0
@@ -233,6 +234,28 @@ export default function Perfil() {
           </button>
           {saved && <p className={styles.saved}>Guardado.</p>}
         </div>
+
+        <section className={styles.danger}>
+          <button
+            type="button"
+            className="btn btn-danger btn-block"
+            onClick={() => {
+              if (confirmReset) {
+                dispatch({ type: 'resetAll' })
+                setConfirmReset(false)
+              } else {
+                setConfirmReset(true)
+              }
+            }}
+          >
+            {confirmReset ? 'Confirmar: borrar todos los datos' : 'Borrar todos los datos'}
+          </button>
+          {!confirmReset && (
+            <p className={styles.dangerHint}>
+              Borra rutinas, sesiones, biblioteca y perfil (incluido lo guardado en la nube).
+            </p>
+          )}
+        </section>
       </form>
     </>
   )

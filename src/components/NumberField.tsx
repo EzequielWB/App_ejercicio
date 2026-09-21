@@ -72,8 +72,8 @@ export default function NumberField({
           onFocus={(e) => e.target.select()}
           aria-label={label}
         />
-        {unit && <span className={styles.unit}>{unit}</span>}
       </div>
+      {unit && <span className={styles.unit}>{unit}</span>}
     </div>
   )
 }

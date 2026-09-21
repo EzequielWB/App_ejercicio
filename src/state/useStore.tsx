@@ -8,7 +8,6 @@ import {
   loadLogs,
   loadProfile,
   loadRoutines,
-  makeSeed,
   normalizeRoutines,
   saveLibrary,
   saveLogs,
@@ -44,6 +43,7 @@ export type Action =
   | { type: 'resetLibraryValues'; id: string }
   | { type: 'deleteLibraryExercise'; id: string }
   | { type: 'hydrate'; data: CloudBundle }
+  | { type: 'resetAll' }
 
 export interface AuthState {
   ready: boolean
@@ -51,14 +51,8 @@ export interface AuthState {
 }
 
 function init(): State {
-  let routines = loadRoutines()
-  let logs = loadLogs()
-  if (routines.length === 0 && logs.length === 0 && !localStorage.getItem('bitacora.seeded.v1')) {
-    const seed = makeSeed()
-    routines = seed.routines
-    logs = seed.logs
-    localStorage.setItem('bitacora.seeded.v1', '1')
-  }
+  const routines = loadRoutines()
+  const logs = loadLogs()
   let library = loadLibrary()
   if (library.length === 0) {
     logs.forEach((log) => {
@@ -141,6 +135,9 @@ function reducer(state: State, action: Action): State {
         profile: { ...defaultProfile(), ...(data.profile ?? {}) },
         library
       }
+    }
+    case 'resetAll': {
+      return { routines: [], logs: [], profile: defaultProfile(), library: [] }
     }
     default:
       return state

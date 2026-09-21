@@ -254,15 +254,15 @@ export default function Sesion() {
                             max={99}
                             step={1}
                           />
-                          <NumberField
-                            label="Peso kg"
-                            value={set.weightUsed}
-                            onChange={(v) => patchSet(exIndex, setIndex, { weightUsed: v })}
-                            min={0}
-                            max={999}
-                            step={2.5}
-                            unit="kg"
-                          />
+<NumberField
+                              label="Peso kg"
+                              value={set.weightUsed}
+                              onChange={(v) => patchSet(exIndex, setIndex, { weightUsed: v })}
+                              min={0}
+                              max={99999}
+                              step={2.5}
+                              unit="kg"
+                            />
                         </div>
                       </div>
                     ))}

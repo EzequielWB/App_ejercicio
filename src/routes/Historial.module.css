@@ -1,0 +1,140 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: block;
+  border: 1px solid var(--line-strong);
+  padding: 12px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.rowHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.date {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toggle {
+  font-size: 20px;
+  color: var(--ink-soft);
+}
+
+.meta {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.stats {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.stat {
+  flex: 1;
+  border: 1px solid var(--line);
+  padding: 8px;
+}
+
+.statVal {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  margin-top: 20px;
+  background: var(--bg);
+  padding-bottom: 8px;
+}
+
+.detailStats {
+  display: flex;
+  gap: 8px;
+}
+
+.detailStat {
+  flex: 1;
+  border: 1px solid var(--line-strong);
+  padding: 10px;
+}
+
+.detailStatVal {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.detailList {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detailEx {
+  border: 1px solid var(--line-strong);
+  padding: 12px;
+}
+
+.detailExName {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.setList {
+  border-top: 1px solid var(--line);
+}
+
+.setRow {
+  display: grid;
+  grid-template-columns: 58px auto auto;
+  justify-content: start;
+  gap: 14px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.setRow:last-child {
+  border-bottom: 0;
+}
+
+.setDone .setIndex {
+  color: var(--ok);
+}
+
+.setIndex {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.setVal {
+  font-variant-numeric: tabular-nums;
+}
+
+.detailActions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+}

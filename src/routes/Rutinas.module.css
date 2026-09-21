@@ -1,0 +1,75 @@
+.list {
+  margin-top: 4px;
+}
+
+.listHead {
+  display: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 12px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.rowName {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowDays {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.rowCount {
+  display: none;
+}
+
+.actions {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 4px 8px;
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  margin-top: 20px;
+  background: var(--bg);
+  padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

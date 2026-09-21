@@ -1,0 +1,167 @@
+.filters {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.fRow {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fExercise {
+  flex: 1;
+  min-width: 0;
+}
+
+.fSegs {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.fCell {
+  flex: 1;
+  min-width: 0;
+}
+
+.chartCard {
+  margin-top: 16px;
+  border: 1px solid var(--line-strong);
+  padding: 14px;
+}
+
+.exerciseTitle {
+  font-size: 16px;
+  letter-spacing: 0.01em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.stats {
+  margin-top: 16px;
+  border: 1px solid var(--line-strong);
+  display: flex;
+}
+
+.stat {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 8px;
+  text-align: center;
+  border-right: 1px solid var(--line);
+}
+
+.stat:last-child {
+  border-right: 0;
+}
+
+.statVal {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.statSub {
+  display: block;
+  font-size: 10px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.pos {
+  color: var(--ok);
+}
+
+.neg {
+  color: var(--danger);
+}
+
+.calCard {
+  margin-top: 16px;
+  border: 1px solid var(--line-strong);
+  padding: 12px;
+}
+
+.calHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.calTitle {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calDow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  text-align: center;
+  padding: 2px 0;
+}
+
+.calCell {
+  position: relative;
+  min-height: 44px;
+  border: 1px solid var(--bg-subtle);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  padding-top: 3px;
+  font-family: var(--font-num);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.calToday {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.calVol {
+  font-size: 8px;
+  color: var(--accent-ink);
+  line-height: 1;
+}
+
+.calLvl1 {
+  background: #dde8e1;
+}
+
+.calLvl2 {
+  background: #9db8ab;
+}
+
+.calLvl3 {
+  background: #5d8371;
+  color: var(--accent-ink);
+}
+
+.calLvl4 {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.calFooter {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}

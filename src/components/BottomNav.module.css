@@ -1,0 +1,40 @@
+.nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line-strong);
+  padding-top: env(safe-area-inset-top);
+  z-index: 20;
+  margin: 0 auto;
+  max-width: 640px;
+}
+
+.link {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 56px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 2px solid transparent;
+}
+
+.link svg {
+  width: 22px;
+  height: 22px;
+}
+
+.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}

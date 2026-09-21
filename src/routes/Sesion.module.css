@@ -1,0 +1,191 @@
+.progressBlock {
+  margin: 16px 0;
+  border: 1px solid var(--line-strong);
+  padding: 12px;
+  background: var(--bg-subtle);
+}
+
+.progressText {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.progressTrack {
+  height: 3px;
+  background: var(--line);
+}
+
+.progressFill {
+  height: 3px;
+  background: var(--accent);
+  transition: width 0.15s linear;
+}
+
+.exList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.ex {
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.exHead {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 4px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+}
+
+.exName {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.exMeta {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+.chevron {
+  display: inline-flex;
+  color: var(--ink-soft);
+  transition: transform 0.12s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.sets {
+  display: none;
+  padding: 0 0 8px;
+}
+
+.setsOpen {
+  display: block;
+}
+
+.setRow {
+  border: 1px solid var(--line);
+  padding: 8px;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 8px;
+}
+
+.setDone {
+  border-color: var(--ok);
+  background: var(--bg-subtle);
+}
+
+.check {
+  grid-row: 1 / 3;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--accent-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.checkOn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.setInfo {
+  padding-top: 2px;
+}
+
+.setIndex {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.setGoal {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.setSteppers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.finish {
+  position: sticky;
+  bottom: 0;
+  margin-top: 20px;
+  background: var(--bg);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.dateRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.session {
+  display: block;
+}
+
+.main {
+  display: block;
+}
+
+.aside {
+  margin-top: 16px;
+}
+
+.dayChoose {
+  margin-top: 16px;
+}
+
+.dayHint {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+@media (min-width: 900px) {
+  .session {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .aside {
+    position: sticky;
+    top: calc(80px + env(safe-area-inset-top));
+    margin-top: 4px;
+  }
+}

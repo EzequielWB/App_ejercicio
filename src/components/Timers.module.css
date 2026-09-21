@@ -1,0 +1,145 @@
+.panel {
+  border: 1px solid var(--line-strong);
+  padding: 12px;
+  background: var(--bg);
+}
+
+.panelHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.panelTitle {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+
+.clock + .clock {
+  border-top: 1px solid var(--line);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.clockLabel {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.digits {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+  margin: 6px 0 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.digitsBtn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px dashed transparent;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: text;
+}
+
+.digitsBtn:hover {
+  border-bottom-color: var(--ink-soft);
+}
+
+.digitsBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.edit {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 6px 0 10px;
+  padding: 2px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+  color: inherit;
+  font: inherit;
+  font-size: 40px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.edit:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.done {
+  color: var(--danger);
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.clockActions {
+  display: flex;
+  gap: 8px;
+}
+
+.clockActions .btn {
+  flex: 1;
+  min-width: 0;
+}
+
+.config {
+  margin-top: 10px;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.preset {
+  flex: 1 1 40px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 12px;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.presetOn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}

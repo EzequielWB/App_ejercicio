@@ -1,0 +1,222 @@
+.section {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.check input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--accent);
+}
+
+.activeCheck {
+  margin-top: 12px;
+  min-height: 44px;
+}
+
+.days {
+  display: flex;
+  gap: 6px;
+}
+
+.copyRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.copyLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.copyRow .select {
+  flex: 1;
+  min-width: 0;
+}
+
+.copyRow .btn {
+  flex: none;
+}
+
+.exHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.exHead .label {
+  margin-bottom: 0;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.exList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.exAdd {
+  margin-top: 12px;
+}
+
+.restField {
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.restChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.restChip {
+  flex: 1 1 40px;
+  min-height: 40px;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 12px;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.restChipOn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.exCard {
+  border: 1px solid var(--line-strong);
+  padding: 12px;
+}
+
+.exTop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  border: 1px solid var(--ink);
+  font-family: var(--font-num);
+  font-size: 13px;
+}
+
+.exName {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+
+.exName:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+  border-bottom-width: 2px;
+}
+
+.exRemove {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.exTargets {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.repsGroup {
+  margin-top: 10px;
+}
+
+.repsInput {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+
+.repsInput:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+  border-bottom-width: 2px;
+}
+
+.exTargets .check {
+  min-height: 44px;
+}
+
+.targetText {
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-num);
+}
+
+.formFooter {
+  display: flex;
+  gap: 10px;
+  padding: 16px 0 8px;
+}
+
+.formFooter .btn {
+  flex: 1;
+}

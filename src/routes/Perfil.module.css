@@ -1,0 +1,165 @@
+.section {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  min-height: 44px;
+  margin-top: 10px;
+}
+
+.check input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--accent);
+}
+
+.imcCard {
+  margin: 16px 0;
+  border: 1px solid var(--line-strong);
+  padding: 14px 12px;
+}
+
+.imcCard .kicker {
+  margin-bottom: 4px;
+}
+
+.imcValue {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.imcCat {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.low {
+  color: var(--ink-soft);
+}
+
+.normal {
+  color: var(--ok);
+}
+
+.high {
+  color: var(--ink);
+}
+
+.obese {
+  color: var(--danger);
+}
+
+.imcHint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.rangeList {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.rangeRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  font-size: 13px;
+  border-left: 3px solid transparent;
+}
+
+.rangeOn {
+  border-left-color: var(--accent);
+  background: var(--bg-subtle);
+  font-weight: 600;
+}
+
+.rangeLabel {
+  letter-spacing: 0.02em;
+}
+
+.rangeVal {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.imcGuide {
+  margin-top: 10px;
+  padding: 8px;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--bg-subtle);
+  border: 1px solid var(--line-strong);
+}
+
+.metrics {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.metricTag {
+  margin-left: 8px;
+  font-family: var(--font);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.fmiNote {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.warn {
+  margin-top: 10px;
+  padding: 8px;
+  font-size: 12px;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  background: var(--bg-subtle);
+}
+
+.footer {
+  padding: 8px 0 16px;
+}
+
+.saved {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ok);
+}

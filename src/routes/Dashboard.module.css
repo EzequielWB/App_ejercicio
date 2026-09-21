@@ -1,0 +1,249 @@
+.card {
+  margin-top: 16px;
+  border: 1px solid var(--line-strong);
+  padding: 14px;
+}
+
+.routineMeta {
+  padding: 6px 0 14px;
+}
+
+.routineName {
+  font-size: 20px;
+  letter-spacing: 0.01em;
+  margin: 4px 0 2px;
+}
+
+.routineDays {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.todayBlock {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.todayLine {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+
+.todayLine strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.doneToday {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ok);
+  text-align: center;
+}
+
+.planBlock {
+  margin-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.planHead {
+  padding: 12px 0 2px;
+}
+
+.planList {
+  margin-top: 2px;
+}
+
+.planRow {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.planRow:last-child {
+  border-bottom: 0;
+}
+
+.planIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--ink);
+  background: var(--bg);
+  font-family: var(--font-num);
+  font-size: 12px;
+}
+
+.planName {
+  font-size: 15px;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.planGoal {
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-family: var(--font-num);
+}
+
+.lastBlock {
+  margin-top: 24px;
+}
+
+.lastHead {
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.lastRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.lastDate {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.lastMeta {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+.lastVolume {
+  text-align: right;
+  border-left: 1px solid var(--line);
+  padding-left: 12px;
+}
+
+.lastVolumeVal {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.sumHead {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.sumList {
+  display: flex;
+  flex-direction: column;
+}
+
+.sumRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.sumName {
+  font-size: 15px;
+  font-weight: 600;
+  grid-column: 1 / -1;
+  line-height: 1.25;
+}
+
+.sumMain {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.sumReps {
+  font-size: 13px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.sumReps strong {
+  color: var(--ink);
+  font-weight: 700;
+  font-family: var(--font-num);
+}
+
+.sumTon {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--font-num);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.sumCmp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.cmpVal {
+  font-family: var(--font-num);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cmpGlyph {
+  font-size: 9px;
+}
+
+.cmpNone {
+  font-family: var(--font-num);
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.sumTotal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 12px 0 2px;
+}
+
+.sumTotalCmp {
+  display: none;
+}
+
+.sumLegend {
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.ok {
+  color: var(--ok);
+}
+
+.warn {
+  color: var(--warn);
+}
+
+.danger {
+  color: var(--danger);
+}

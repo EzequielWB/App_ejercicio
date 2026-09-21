@@ -38,10 +38,17 @@ export interface WorkoutLog {
   completedExercises: CompletedExercise[]
 }
 
+export type Sex = 'male' | 'female'
+
+export type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active' | 'veryActive'
+
 export interface Profile {
   weightKg: number
   heightCm: number
   bodyFatPct: number | null
+  age: number
+  sex: Sex
+  activity: ActivityLevel
 }
 
 export interface LibraryExercise {

@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import NumberField from '../components/NumberField'
 import Timers from '../components/Timers'
 import { restStart } from '../components/restTimerApi'
 import { useStore } from '../state/useStore'
-import { uid } from '../storage/db'
+import { clearSessionDraft, loadSessionDraft, saveSessionDraft, uid } from '../storage/db'
+import type { SessionDraft, SessionDraftExercise } from '../storage/db'
 import type { ExerciseTemplate, WorkoutLog } from '../types'
 import { DAY_NAMES, DAY_NAMES_SHORT, formatWeight, todayIndexOfWeek } from '../utils'
 import styles from './Sesion.module.css'
@@ -53,27 +54,70 @@ export default function Sesion() {
   const { state, dispatch } = useStore()
   const navigate = useNavigate()
   const routine = state.routines.find((r) => r.active) ?? null
-  const [overrideDay, setOverrideDay] = useState<number | null>(null)
+
+  const savedRef = useRef<SessionDraft | null | undefined>(undefined)
+  const getSaved = (): SessionDraft | null => {
+    if (savedRef.current === undefined) savedRef.current = loadSessionDraft()
+    return savedRef.current
+  }
+
+  const [overrideDay, setOverrideDay] = useState<number | null>(() => {
+    const s = getSaved()
+    return s && s.routineId === routine?.id ? s.planDay : null
+  })
   const planDay = overrideDay ?? todayIndexOfWeek()
   const exercises = routine
     ? (routine.schedule.find((d) => d.dayOfWeek === planDay)?.exercises ?? [])
     : []
+  const signature = exercises.map((e) => `${e.name}|${e.targetSets}|${e.targetReps}`).join('~')
+
+  const restored = (): boolean => {
+    const s = getSaved()
+    return (
+      s !== null &&
+      s.routineId === routine?.id &&
+      s.planDay === planDay &&
+      s.signature === signature
+    )
+  }
 
   const [drafts, setDrafts] = useState<DraftExercise[]>(() =>
-    initDrafts(exercises, state.profile.weightKg)
+    restored() ? getSaved()!.drafts : initDrafts(exercises, state.profile.weightKg)
   )
-  const [expanded, setExpanded] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState<string | null>(() =>
+    restored() ? getSaved()!.expanded : null
+  )
 
   const [logDate, setLogDate] = useState(() => {
+    const s = getSaved()
+    if (restored() && s?.logDate) return s.logDate
     const d = new Date()
     const pad = (n: number) => String(n).padStart(2, '0')
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
   })
 
+  const skippedFirst = useRef(false)
   useEffect(() => {
+    if (!skippedFirst.current) {
+      skippedFirst.current = true
+      return
+    }
     setDrafts(initDrafts(exercises, state.profile.weightKg))
     setExpanded(null)
   }, [planDay, routine?.id])
+
+  useEffect(() => {
+    if (!routine || exercises.length === 0) return
+    const draft: SessionDraft = {
+      routineId: routine.id,
+      planDay,
+      logDate,
+      expanded,
+      signature,
+      drafts: drafts as SessionDraftExercise[]
+    }
+    saveSessionDraft(draft)
+  }, [drafts, planDay, logDate, expanded, signature, routine?.id, exercises.length])
 
   const totalSets = drafts.reduce((a, e) => a + e.sets.length, 0)
   const doneSets = drafts.reduce((a, e) => a + e.sets.filter((s) => s.completed).length, 0)
@@ -109,6 +153,7 @@ export default function Sesion() {
       }))
     }
     dispatch({ type: 'addWorkoutLog', log })
+    clearSessionDraft()
     navigate('/')
   }
 

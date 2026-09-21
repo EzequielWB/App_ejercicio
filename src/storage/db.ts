@@ -4,6 +4,7 @@ const ROUTINES_KEY = 'bitacora.routines.v1'
 const LOGS_KEY = 'bitacora.logs.v1'
 const PROFILE_KEY = 'bitacora.profile.v1'
 const LIBRARY_KEY = 'bitacora.library.v1'
+const SESSION_DRAFT_KEY = 'bitacora.sessionDraft.v1'
 
 export function uid(): string {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
@@ -56,7 +57,7 @@ export function saveLogs(logs: WorkoutLog[]): void {
 }
 
 export function defaultProfile(): Profile {
-  return { weightKg: 75, heightCm: 175, bodyFatPct: null }
+  return { weightKg: 75, heightCm: 175, bodyFatPct: null, age: 30, sex: 'male', activity: 'moderate' }
 }
 
 export function loadProfile(): Profile {
@@ -73,6 +74,39 @@ export function loadLibrary(): LibraryExercise[] {
 
 export function saveLibrary(library: LibraryExercise[]): void {
   write(LIBRARY_KEY, library)
+}
+
+export interface SessionDraftSet {
+  repsPerformed: number
+  weightUsed: number
+  completed: boolean
+}
+
+export interface SessionDraftExercise {
+  id: string
+  name: string
+  sets: SessionDraftSet[]
+}
+
+export interface SessionDraft {
+  routineId: string
+  planDay: number
+  logDate: string
+  expanded: string | null
+  signature: string
+  drafts: SessionDraftExercise[]
+}
+
+export function loadSessionDraft(): SessionDraft | null {
+  return read<SessionDraft>(SESSION_DRAFT_KEY)
+}
+
+export function saveSessionDraft(draft: SessionDraft): void {
+  write(SESSION_DRAFT_KEY, draft)
+}
+
+export function clearSessionDraft(): void {
+  localStorage.removeItem(SESSION_DRAFT_KEY)
 }
 
 export interface SeedBundle {

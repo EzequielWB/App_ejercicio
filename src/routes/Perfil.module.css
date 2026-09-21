@@ -3,6 +3,16 @@
   border-bottom: 1px solid var(--line);
 }
 
+.dataCard {
+  margin: 16px 0;
+  border: 1px solid var(--line-strong);
+  padding: 14px 12px;
+}
+
+.dataCard .kicker {
+  margin-bottom: 10px;
+}
+
 .rows {
   display: flex;
   flex-direction: column;
@@ -15,7 +25,7 @@
   gap: 10px;
   font-size: 14px;
   min-height: 44px;
-  margin-top: 10px;
+  margin-top: 0;
 }
 
 .check input {
@@ -177,5 +187,255 @@
   margin-top: 10px;
   text-align: center;
   font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.fields {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+}
+
+.fieldsLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.dataSelect {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.dataSelect:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.calCard {
+  margin: 16px 0;
+  border: 1px solid var(--line-strong);
+  padding: 14px 12px;
+}
+
+.calCard .kicker {
+  margin-bottom: 4px;
+}
+
+.targets {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.targetCard {
+  border: 1px solid var(--line-strong);
+  padding: 12px;
+  background: var(--bg-subtle);
+}
+
+.targetOn {
+  border-color: var(--accent);
+  background: var(--bg);
+}
+
+.targetHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.targetLabel {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.targetDelta {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.targetKcal {
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-top: 6px;
+}
+
+.targetUnit {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.targetMacros {
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.calHint {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+@media (min-width: 640px) {
+  .targets {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.aiSection {
+  margin: 16px 0;
+  border: 1px solid var(--line-strong);
+  padding: 14px 12px;
+}
+
+.aiSection .kicker {
+  margin-bottom: 4px;
+}
+
+.aiIntro {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.aiInput {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.aiInput:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.aiNote {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.aiError {
+  margin-top: 8px;
+  padding: 8px;
+  font-size: 12px;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  background: var(--bg-subtle);
+}
+
+.aiResult {
+  margin-top: 12px;
+  border-top: 1px solid var(--line-strong);
+  padding-top: 12px;
+}
+
+.aiKcalRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.aiKcal {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.aiKcalUnit {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.aiMacros {
+  margin-top: 8px;
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.aiHigh {
+  margin-top: 8px;
+  padding: 8px;
+  font-size: 13px;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  background: var(--bg-subtle);
+}
+
+.aiLow {
+  margin-top: 8px;
+  padding: 8px;
+  font-size: 13px;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  background: var(--bg-subtle);
+}
+
+.aiOk {
+  margin-top: 8px;
+  padding: 8px;
+  font-size: 13px;
+  color: var(--ok);
+  border: 1px solid var(--ok);
+  background: var(--bg-subtle);
+}
+
+.aiComment {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.aiModel {
+  margin-top: 8px;
+  font-size: 11px;
   color: var(--ink-soft);
 }

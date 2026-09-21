@@ -3,7 +3,19 @@ import type { FormEvent } from 'react'
 import NumberField from '../components/NumberField'
 import { useStore } from '../state/useStore'
 import { formatWeight } from '../utils'
+import { ACTIVITY_LABELS, calorieTargets } from '../nutrition'
+import type { ActivityLevel, Profile, Sex } from '../types'
 import styles from './Perfil.module.css'
+
+interface FoodEstimate {
+  kcal: number
+  protein: number
+  carbs: number
+  fat: number
+  comment: string
+  model?: string
+  provider?: string
+}
 
 function imcCategory(imc: number): string {
   if (imc < 18.5) return 'Bajo peso'
@@ -18,8 +30,60 @@ export default function Perfil() {
   const [height, setHeight] = useState(state.profile.heightCm)
   const [trackFat, setTrackFat] = useState(state.profile.bodyFatPct !== null)
   const [fat, setFat] = useState(state.profile.bodyFatPct ?? 0)
+  const [age, setAge] = useState(state.profile.age)
+  const [sex, setSex] = useState<Sex>(state.profile.sex)
+  const [activity, setActivity] = useState<ActivityLevel>(state.profile.activity)
   const [saved, setSaved] = useState(false)
   const [confirmReset, setConfirmReset] = useState(false)
+
+  const [aiText, setAiText] = useState('')
+  const [aiBusy, setAiBusy] = useState(false)
+  const [aiError, setAiError] = useState('')
+  const [aiResult, setAiResult] = useState<FoodEstimate | null>(null)
+
+  const liveProfile: Profile = {
+    weightKg: weight,
+    heightCm: height,
+    bodyFatPct: trackFat ? fat : null,
+    age,
+    sex,
+    activity
+  }
+  const targets = calorieTargets(liveProfile)
+  const maintKcal = targets.find((t) => t.id === 'mantenimiento')?.kcal ?? 0
+  const aiDiff = aiResult ? aiResult.kcal - maintKcal : null
+
+  const estimate = async () => {
+    if (!aiText.trim() || aiBusy) return
+    setAiBusy(true)
+    setAiError('')
+    setAiResult(null)
+    try {
+      const res = await fetch('/api/estimate-food', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: aiText.trim(), targetKcal: maintKcal })
+      })
+      if (!res.ok) {
+        const msg = await res.text().catch(() => '')
+        throw new Error(msg || `Error ${res.status}`)
+      }
+      const data = (await res.json()) as FoodEstimate
+      setAiResult({
+        kcal: Math.round(data.kcal),
+        protein: Math.round(data.protein),
+        carbs: Math.round(data.carbs),
+        fat: Math.round(data.fat),
+        comment: data.comment,
+        model: data.model,
+        provider: data.provider
+      })
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : 'No se pudo estimar. Probá de nuevo.')
+    } finally {
+      setAiBusy(false)
+    }
+  }
 
   const imc = weight > 0 && height > 0 ? weight / Math.pow(height / 100, 2) : null
   const hM = height > 0 ? height / 100 : 0
@@ -98,7 +162,10 @@ export default function Perfil() {
       profile: {
         weightKg: weight,
         heightCm: height,
-        bodyFatPct: trackFat ? fat : null
+        bodyFatPct: trackFat ? fat : null,
+        age,
+        sex,
+        activity
       }
     })
     setSaved(true)
@@ -115,8 +182,10 @@ export default function Perfil() {
       </header>
 
       <form onSubmit={handleSave} noValidate>
-        <section className={styles.section}>
+        <section className={styles.dataCard}>
+          <span className="kicker">Datos físicos</span>
           <div className={styles.rows}>
+            <div className={styles.pair}>
             <NumberField
               label="Peso"
               value={weight}
@@ -157,6 +226,45 @@ export default function Perfil() {
               unit="%"
             />
           )}
+
+          <div className={styles.pair}>
+            <NumberField
+              label="Edad"
+              value={age}
+              onChange={setAge}
+              min={10}
+              max={100}
+              step={1}
+              unit="años"
+            />
+            <label className={styles.fields}>
+              <span className={styles.fieldsLabel}>Sexo</span>
+              <select
+                className={styles.dataSelect}
+                value={sex}
+                onChange={(e) => setSex(e.target.value as Sex)}
+              >
+                <option value="male">Hombre</option>
+                <option value="female">Mujer</option>
+              </select>
+            </label>
+          </div>
+
+          <label className={styles.fields}>
+            <span className={styles.fieldsLabel}>Nivel de actividad</span>
+            <select
+              className={styles.dataSelect}
+              value={activity}
+              onChange={(e) => setActivity(e.target.value as ActivityLevel)}
+            >
+              {(Object.keys(ACTIVITY_LABELS) as ActivityLevel[]).map((k) => (
+                <option key={k} value={k}>
+                  {ACTIVITY_LABELS[k]}
+                </option>
+              ))}
+            </select>
+          </label>
+          </div>
         </section>
 
         <section className={styles.imcCard}>
@@ -222,6 +330,90 @@ export default function Perfil() {
                 </p>
               )}
             </>
+          )}
+        </section>
+
+        <section className={styles.calCard}>
+          <span className="kicker">Objetivo calórico diario</span>
+          <div className={styles.targets}>
+            {targets.map((t) => (
+              <div
+                key={t.id}
+                className={`${styles.targetCard} ${t.id === 'mantenimiento' ? styles.targetOn : ''}`}
+              >
+                <div className={styles.targetHead}>
+                  <span className={styles.targetLabel}>{t.label}</span>
+                  <span className={styles.targetDelta}>{t.delta}</span>
+                </div>
+                <div className={`${styles.targetKcal} text-num`}>{t.kcal}</div>
+                <div className={styles.targetUnit}>kcal/día</div>
+                <div className={styles.targetMacros}>
+                  <span>P {t.proteinG}g</span>
+                  <span>C {t.carbsG}g</span>
+                  <span>G {t.fatG}g</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className={styles.calHint}>
+            Mifflin‑St Jeor / Katch‑McArdle (según % grasa) · proteína 2 g/kg · grasa 0.9 g/kg.
+          </p>
+        </section>
+
+        <section className={styles.aiSection}>
+          <span className="kicker">Lo que comí hoy</span>
+          <p className={styles.aiIntro}>
+            Escribí más o menos lo que comiste hoy y la IA estima calorías y macros, para tener
+            una idea de si comiste de más o de menos.
+          </p>
+          <textarea
+            className={styles.aiInput}
+            rows={5}
+            placeholder="Ej: un plato de fideos con tuco y queso, dos milanesas con puré, un sándwich de milanesa, una manzana y una gaseosa."
+            value={aiText}
+            onChange={(e) => setAiText(e.target.value)}
+          />
+          <button
+            type="button"
+            className="btn btn-accent btn-block"
+            onClick={() => void estimate()}
+            disabled={aiBusy || !aiText.trim()}
+          >
+            {aiBusy ? 'Estimando…' : 'Estimar con IA'}
+          </button>
+          <p className={styles.aiNote}>
+            Estimación aproximada. La cantidad de kcal se compara con tu mantenimiento ({maintKcal}{' '}
+            kcal).
+          </p>
+          {aiError && <p className={styles.aiError}>{aiError}</p>}
+          {aiResult && (
+            <div className={styles.aiResult}>
+              <div className={styles.aiKcalRow}>
+                <div className={`${styles.aiKcal} text-num`}>{aiResult.kcal}</div>
+                <div className={styles.aiKcalUnit}>kcal aprox.</div>
+              </div>
+              <div className={styles.aiMacros}>
+                <span>Proteína {aiResult.protein}g</span>
+                <span>Carbos {aiResult.carbs}g</span>
+                <span>Grasa {aiResult.fat}g</span>
+              </div>
+              {aiDiff !== null && aiDiff !== 0 && (
+                <p className={aiDiff >= 0 ? styles.aiHigh : styles.aiLow}>
+                  {aiDiff >= 0
+                    ? `Te pasaste ${aiDiff} kcal del mantenimiento.`
+                    : `Te faltan ${Math.abs(aiDiff)} kcal para tu mantenimiento.`}
+                </p>
+              )}
+              {aiDiff !== null && aiDiff === 0 && (
+                <p className={styles.aiOk}>Estás justo en tu mantenimiento.</p>
+              )}
+              {aiResult.comment && <p className={styles.aiComment}>{aiResult.comment}</p>}
+              {aiResult.model && (
+                <p className={styles.aiModel}>
+                  {aiResult.provider === 'groq' ? 'Groq' : 'OpenRouter'} · {aiResult.model}
+                </p>
+              )}
+            </div>
           )}
         </section>
 

@@ -6,7 +6,7 @@ import { restStart } from '../components/restTimerApi'
 import { useStore } from '../state/useStore'
 import { uid } from '../storage/db'
 import type { ExerciseTemplate, WorkoutLog } from '../types'
-import { DAY_NAMES, DAY_NAMES_SHORT, firstReps, formatWeight, todayIndexOfWeek } from '../utils'
+import { DAY_NAMES, DAY_NAMES_SHORT, formatWeight, todayIndexOfWeek } from '../utils'
 import styles from './Sesion.module.css'
 
 interface DraftSet {

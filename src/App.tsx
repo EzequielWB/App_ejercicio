@@ -1,5 +1,7 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
+import Login from './components/Login'
+import { useStore } from './state/useStore'
 import Biblioteca from './routes/Biblioteca'
 import Dashboard from './routes/Dashboard'
 import Historial from './routes/Historial'
@@ -11,7 +13,20 @@ import Rutinas from './routes/Rutinas'
 import Sesion from './routes/Sesion'
 
 export default function App() {
+  const { auth } = useStore()
   const { pathname } = useLocation()
+
+  if (!auth.ready) {
+    return (
+      <div className="app-shell">
+        <div className="boot">Bitácora de Entrenamiento</div>
+      </div>
+    )
+  }
+  if (!auth.authed) {
+    return <Login />
+  }
+
   const wide = pathname === '/sesion'
   return (
     <div className="app-shell">

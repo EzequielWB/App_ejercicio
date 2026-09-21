@@ -25,8 +25,7 @@ function write(key: string, value: unknown): void {
   localStorage.setItem(key, JSON.stringify(value))
 }
 
-export function loadRoutines(): Routine[] {
-  const routines = read<Routine[]>(ROUTINES_KEY) ?? []
+export function normalizeRoutines(routines: Routine[]): Routine[] {
   return routines.map((r) => ({
     ...r,
     schedule: r.schedule.map((d) => ({
@@ -38,6 +37,10 @@ export function loadRoutines(): Routine[] {
       }))
     }))
   }))
+}
+
+export function loadRoutines(): Routine[] {
+  return normalizeRoutines(read<Routine[]>(ROUTINES_KEY) ?? [])
 }
 
 export function saveRoutines(routines: Routine[]): void {

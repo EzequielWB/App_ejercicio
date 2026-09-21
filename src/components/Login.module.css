@@ -1,0 +1,56 @@
+.wrap {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.card {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.brand {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 26px;
+}
+
+.brand h1 {
+  font-size: 24px;
+  letter-spacing: 0.02em;
+}
+
+.brand p {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.field {
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 13px;
+  text-align: center;
+}

@@ -13,7 +13,7 @@ function imcCategory(imc: number): string {
 }
 
 export default function Perfil() {
-  const { state, dispatch } = useStore()
+  const { state, dispatch, logout } = useStore()
   const [weight, setWeight] = useState(state.profile.weightKg)
   const [height, setHeight] = useState(state.profile.heightCm)
   const [trackFat, setTrackFat] = useState(state.profile.bodyFatPct !== null)
@@ -227,6 +227,9 @@ export default function Perfil() {
         <div className={styles.footer}>
           <button type="submit" className="btn btn-accent btn-block">
             Guardar
+          </button>
+          <button type="button" className="btn btn-block" onClick={() => void logout()}>
+            Cerrar sesión
           </button>
           {saved && <p className={styles.saved}>Guardado.</p>}
         </div>

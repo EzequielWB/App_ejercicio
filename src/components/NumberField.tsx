@@ -40,8 +40,7 @@ export default function NumberField({
       return
     }
     const decimals = Math.max(String(step).split('.')[1]?.length ?? 0, 1)
-    let next = Math.round(n / step) * step
-    next = Math.round(next * Math.pow(10, decimals)) / Math.pow(10, decimals)
+    let next = Math.round(n * Math.pow(10, decimals)) / Math.pow(10, decimals)
     if (next < min) next = min
     if (next > max) next = max
     if (next !== value) onChange(next)

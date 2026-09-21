@@ -38,7 +38,7 @@ function initDrafts(exercises: ExerciseTemplate[], profileWeight: number): Draft
     id: e.id,
     name: e.name,
     sets: Array.from({ length: e.targetSets }, () => ({
-      repsPerformed: firstReps(e.targetReps),
+      repsPerformed: 0,
       weightUsed: e.bodyweight
         ? profileWeight > 0
           ? profileWeight

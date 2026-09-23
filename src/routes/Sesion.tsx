@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import NumberField from '../components/NumberField'
 import Timers from '../components/Timers'
@@ -7,7 +7,7 @@ import { useStore } from '../state/useStore'
 import { clearSessionDraft, loadSessionDraft, saveSessionDraft, uid } from '../storage/db'
 import type { SessionDraft, SessionDraftExercise } from '../storage/db'
 import type { ExerciseTemplate, SetRecord, WorkoutLog } from '../types'
-import { DAY_NAMES, DAY_NAMES_SHORT, formatWeight, todayIndexOfWeek } from '../utils'
+import { DAY_NAMES, DAY_NAMES_SHORT, formatWeight, normalize, todayIndexOfWeek } from '../utils'
 import styles from './Sesion.module.css'
 
 const IconCheck = () => (
@@ -22,13 +22,21 @@ const IconChevron = () => (
   </svg>
 )
 
-function initDrafts(exercises: ExerciseTemplate[], profileWeight: number): SessionDraftExercise[] {
+function initDrafts(
+  exercises: ExerciseTemplate[],
+  profileWeight: number,
+  lastWeights: Map<string, number>
+): SessionDraftExercise[] {
   return exercises.map((e) => ({
     id: e.id,
     name: e.name,
     sets: Array.from({ length: e.targetSets }, () => ({
       repsPerformed: 0,
-      weightUsed: e.bodyweight && profileWeight > 0 ? profileWeight : e.targetWeight,
+      weightUsed: e.bodyweight
+        ? profileWeight > 0
+          ? profileWeight
+          : e.targetWeight
+        : (lastWeights.get(normalize(e.name)) ?? e.targetWeight),
       completed: false
     }))
   }))
@@ -62,8 +70,27 @@ export default function Sesion() {
     saved.planDay === planDay &&
     saved.signature === signature
 
+  const lastWeights = useMemo(() => {
+    const map = new Map<string, number>()
+    const logs = [...state.logs].sort((a, b) => b.date.localeCompare(a.date))
+    for (const log of logs) {
+      for (const ex of log.completedExercises) {
+        const key = normalize(ex.exerciseName)
+        if (map.has(key)) continue
+        const done = ex.sets.filter((s) => s.completed).map((s) => s.weightUsed)
+        const weights = done.length > 0 ? done : ex.sets.map((s) => s.weightUsed)
+        if (weights.length === 0) continue
+        const max = Math.max(...weights)
+        if (max > 0) map.set(key, max)
+      }
+    }
+    return map
+  }, [state.logs])
+
   const [drafts, setDrafts] = useState<SessionDraftExercise[]>(() =>
-    restored ? saved?.drafts ?? [] : initDrafts(exercises, state.profile.weightKg)
+    restored
+      ? saved?.drafts ?? []
+      : initDrafts(exercises, state.profile.weightKg, lastWeights)
   )
   const [expanded, setExpanded] = useState<string[]>(() =>
     restored ? saved?.expanded ?? [] : []
@@ -82,7 +109,7 @@ export default function Sesion() {
       skippedFirst.current = true
       return
     }
-    setDrafts(initDrafts(exercises, state.profile.weightKg))
+    setDrafts(initDrafts(exercises, state.profile.weightKg, lastWeights))
     setExpanded([])
   }, [planDay, routine?.id])
 

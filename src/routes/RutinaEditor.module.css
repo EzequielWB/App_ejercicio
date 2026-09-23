@@ -167,6 +167,31 @@
   cursor: pointer;
 }
 
+.exMove {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: none;
+}
+
+.exMoveBtn {
+  width: 32px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.exMoveBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 .exTargets {
   margin-top: 8px;
   display: flex;

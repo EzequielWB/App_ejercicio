@@ -28,6 +28,18 @@ const IconX = () => (
   </svg>
 )
 
+const IconUp = () => (
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M6 14l6-6 6 6" />
+  </svg>
+)
+
+const IconDown = () => (
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M6 10l6 6 6-6" />
+  </svg>
+)
+
 const cloneList = (list: DraftExercise[]): DraftExercise[] =>
   list.map((e) => ({ ...e, key: uid() }))
 
@@ -141,6 +153,16 @@ export default function RutinaEditor() {
 
   const removeActive = (key: string) => {
     setActiveExercises((prev) => prev.filter((x) => x.key !== key))
+  }
+
+  const moveActive = (from: number, to: number) => {
+    setActiveExercises((prev) => {
+      if (to < 0 || to >= prev.length) return prev
+      const next = [...prev]
+      const [item] = next.splice(from, 1)
+      next.splice(to, 0, item)
+      return next
+    })
   }
 
   const copyOptions = days.filter((d) => d !== editingDaySafe)
@@ -357,6 +379,26 @@ export default function RutinaEditor() {
                         onChange={(name) => patchActive(ex.key, { name })}
                         placeholder="Nombre del ejercicio"
                       />
+                      <div className={styles.exMove}>
+                        <button
+                          type="button"
+                          className={styles.exMoveBtn}
+                          aria-label="Mover ejercicio hacia arriba"
+                          disabled={i === 0}
+                          onClick={() => moveActive(i, i - 1)}
+                        >
+                          <IconUp />
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.exMoveBtn}
+                          aria-label="Mover ejercicio hacia abajo"
+                          disabled={i === activeExercises.length - 1}
+                          onClick={() => moveActive(i, i + 1)}
+                        >
+                          <IconDown />
+                        </button>
+                      </div>
                       <button
                         type="button"
                         className={styles.exRemove}

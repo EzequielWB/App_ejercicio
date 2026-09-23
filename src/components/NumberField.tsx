@@ -6,6 +6,7 @@ interface Props {
   label: string
   value: number
   onChange: (value: number) => void
+  onType?: (value: number) => void
   min?: number
   max?: number
   step?: number
@@ -16,6 +17,7 @@ export default function NumberField({
   label,
   value,
   onChange,
+  onType,
   min = 0,
   max = 999,
   step = 1,
@@ -65,7 +67,12 @@ export default function NumberField({
           inputMode="decimal"
           autoComplete="off"
           spellCheck={false}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            const raw = e.target.value
+            setText(raw)
+            const n = Number(raw.replace(',', '.').trim())
+            if (onType && raw.trim() !== '' && Number.isFinite(n)) onType(n)
+          }}
           onBlur={commit}
           onKeyDown={onKeyDown}
           onFocus={(e) => e.target.select()}

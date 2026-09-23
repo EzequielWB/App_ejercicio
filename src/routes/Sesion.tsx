@@ -84,8 +84,8 @@ export default function Sesion() {
   const [drafts, setDrafts] = useState<DraftExercise[]>(() =>
     restored() ? getSaved()!.drafts : initDrafts(exercises, state.profile.weightKg)
   )
-  const [expanded, setExpanded] = useState<string | null>(() =>
-    restored() ? getSaved()!.expanded : null
+  const [expanded, setExpanded] = useState<string[]>(() =>
+    restored() ? getSaved()!.expanded : []
   )
 
   const [logDate, setLogDate] = useState(() => {
@@ -103,7 +103,7 @@ export default function Sesion() {
       return
     }
     setDrafts(initDrafts(exercises, state.profile.weightKg))
-    setExpanded(null)
+    setExpanded([])
   }, [planDay, routine?.id])
 
   useEffect(() => {
@@ -240,7 +240,7 @@ export default function Sesion() {
 
           <div className={styles.exList}>
             {drafts.map((ex, exIndex) => {
-              const open = expanded === ex.id
+              const open = expanded.includes(ex.id)
               const exDone = ex.sets.filter((s) => s.completed).length
               const template = exercises[exIndex]
               return (
@@ -248,7 +248,13 @@ export default function Sesion() {
                   <button
                     type="button"
                     className={styles.exHead}
-                    onClick={() => setExpanded(open ? null : ex.id)}
+                    onClick={() =>
+                        setExpanded((prev) =>
+                          prev.includes(ex.id)
+                            ? prev.filter((id) => id !== ex.id)
+                            : [...prev, ex.id]
+                        )
+                      }
                     aria-expanded={open}
                   >
                     <div>
@@ -283,7 +289,7 @@ export default function Sesion() {
                         <div className={styles.setInfo}>
                           <span className={styles.setIndex}>Serie {setIndex + 1}</span>
                           <span className={styles.setGoal}>
-                            objetivo {template.targetReps} reps ·{' '}
+                            Objetivo {template.targetReps} reps ·{' '}
                             {template.bodyweight
                               ? 'peso corporal'
                               : `${formatWeight(template.targetWeight)} kg`}
@@ -295,6 +301,12 @@ export default function Sesion() {
                             label="Reps"
                             value={set.repsPerformed}
                             onChange={(v) => patchSet(exIndex, setIndex, { repsPerformed: v })}
+                            onType={(v) => {
+                              if (!set.completed && v > 0) {
+                                patchSet(exIndex, setIndex, { completed: true })
+                                if (template.restSec) restStart(template.restSec)
+                              }
+                            }}
                             min={0}
                             max={99}
                             step={1}

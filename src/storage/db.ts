@@ -92,13 +92,23 @@ export interface SessionDraft {
   routineId: string
   planDay: number
   logDate: string
-  expanded: string | null
+  expanded: string[]
   signature: string
   drafts: SessionDraftExercise[]
 }
 
 export function loadSessionDraft(): SessionDraft | null {
-  return read<SessionDraft>(SESSION_DRAFT_KEY)
+  const draft = read<SessionDraft>(SESSION_DRAFT_KEY)
+  if (!draft) return null
+  const legacy = draft.expanded as unknown
+  const expanded = Array.isArray(legacy)
+    ? legacy
+    : legacy === null
+      ? []
+      : typeof legacy === 'string'
+        ? [legacy]
+        : []
+  return { ...draft, expanded }
 }
 
 export function saveSessionDraft(draft: SessionDraft): void {

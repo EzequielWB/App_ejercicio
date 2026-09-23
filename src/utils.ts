@@ -13,19 +13,17 @@ export function todayExercises(routine: Routine | null) {
   return day?.exercises ?? []
 }
 
-export function firstReps(text: string): number {
-  const m = /\d+/.exec(text ?? '')
-  return m ? parseInt(m[0], 10) : 1
+function trimDecimals(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '')
 }
 
 export function formatWeight(value: number): string {
-  const s = Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '')
-  return s
+  return trimDecimals(value)
 }
 
 export function formatNumber(value: number): string {
   if (Math.abs(value) >= 1000) return Math.round(value).toLocaleString('es-AR')
-  return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '')
+  return trimDecimals(value)
 }
 
 export function formatDate(iso: string): string {

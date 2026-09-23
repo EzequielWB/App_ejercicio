@@ -6,21 +6,9 @@ import { restStart } from '../components/restTimerApi'
 import { useStore } from '../state/useStore'
 import { clearSessionDraft, loadSessionDraft, saveSessionDraft, uid } from '../storage/db'
 import type { SessionDraft, SessionDraftExercise } from '../storage/db'
-import type { ExerciseTemplate, WorkoutLog } from '../types'
+import type { ExerciseTemplate, SetRecord, WorkoutLog } from '../types'
 import { DAY_NAMES, DAY_NAMES_SHORT, formatWeight, todayIndexOfWeek } from '../utils'
 import styles from './Sesion.module.css'
-
-interface DraftSet {
-  repsPerformed: number
-  weightUsed: number
-  completed: boolean
-}
-
-interface DraftExercise {
-  id: string
-  name: string
-  sets: DraftSet[]
-}
 
 const IconCheck = () => (
   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4">
@@ -34,17 +22,13 @@ const IconChevron = () => (
   </svg>
 )
 
-function initDrafts(exercises: ExerciseTemplate[], profileWeight: number): DraftExercise[] {
+function initDrafts(exercises: ExerciseTemplate[], profileWeight: number): SessionDraftExercise[] {
   return exercises.map((e) => ({
     id: e.id,
     name: e.name,
     sets: Array.from({ length: e.targetSets }, () => ({
       repsPerformed: 0,
-      weightUsed: e.bodyweight
-        ? profileWeight > 0
-          ? profileWeight
-          : e.targetWeight
-        : e.targetWeight,
+      weightUsed: e.bodyweight && profileWeight > 0 ? profileWeight : e.targetWeight,
       completed: false
     }))
   }))
@@ -71,26 +55,22 @@ export default function Sesion() {
     : []
   const signature = exercises.map((e) => `${e.name}|${e.targetSets}|${e.targetReps}`).join('~')
 
-  const restored = (): boolean => {
-    const s = getSaved()
-    return (
-      s !== null &&
-      s.routineId === routine?.id &&
-      s.planDay === planDay &&
-      s.signature === signature
-    )
-  }
+  const saved = getSaved()
+  const restored =
+    saved !== null &&
+    saved.routineId === routine?.id &&
+    saved.planDay === planDay &&
+    saved.signature === signature
 
-  const [drafts, setDrafts] = useState<DraftExercise[]>(() =>
-    restored() ? getSaved()!.drafts : initDrafts(exercises, state.profile.weightKg)
+  const [drafts, setDrafts] = useState<SessionDraftExercise[]>(() =>
+    restored ? saved?.drafts ?? [] : initDrafts(exercises, state.profile.weightKg)
   )
   const [expanded, setExpanded] = useState<string[]>(() =>
-    restored() ? getSaved()!.expanded : []
+    restored ? saved?.expanded ?? [] : []
   )
 
   const [logDate, setLogDate] = useState(() => {
-    const s = getSaved()
-    if (restored() && s?.logDate) return s.logDate
+    if (restored && saved?.logDate) return saved.logDate
     const d = new Date()
     const pad = (n: number) => String(n).padStart(2, '0')
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
@@ -114,7 +94,7 @@ export default function Sesion() {
       logDate,
       expanded,
       signature,
-      drafts: drafts as SessionDraftExercise[]
+      drafts
     }
     saveSessionDraft(draft)
   }, [drafts, planDay, logDate, expanded, signature, routine?.id, exercises.length])
@@ -123,7 +103,7 @@ export default function Sesion() {
   const doneSets = drafts.reduce((a, e) => a + e.sets.filter((s) => s.completed).length, 0)
   const pct = totalSets === 0 ? 0 : Math.round((doneSets / totalSets) * 100)
 
-  const patchSet = (exIndex: number, setIndex: number, patch: Partial<DraftSet>) => {
+  const patchSet = (exIndex: number, setIndex: number, patch: Partial<SetRecord>) => {
     setDrafts((prev) =>
       prev.map((e, i) =>
         i === exIndex
@@ -131,6 +111,16 @@ export default function Sesion() {
           : e
       )
     )
+  }
+
+  const completeSet = (
+    exIndex: number,
+    setIndex: number,
+    template: ExerciseTemplate,
+    completed: boolean
+  ) => {
+    patchSet(exIndex, setIndex, { completed })
+    if (completed && template.restSec) restStart(template.restSec)
   }
 
   const handleFinish = () => {
@@ -157,15 +147,19 @@ export default function Sesion() {
     navigate('/')
   }
 
+  const sessionHead = (
+    <header className="head">
+      <div>
+        <div className="kicker">Modo sesión</div>
+        <h1>Sesión</h1>
+      </div>
+    </header>
+  )
+
   if (!routine) {
     return (
       <>
-        <header className="head">
-          <div>
-            <div className="kicker">Modo sesión</div>
-            <h1>Sesión</h1>
-          </div>
-        </header>
+        {sessionHead}
         <div className="empty">
           No hay una rutina activa. Activá una en <Link to="/rutinas">Rutinas</Link>.
         </div>
@@ -177,12 +171,7 @@ export default function Sesion() {
     const planned = routine.schedule
     return (
       <>
-        <header className="head">
-          <div>
-            <div className="kicker">Modo sesión</div>
-            <h1>Sesión</h1>
-          </div>
-        </header>
+        {sessionHead}
         <div className="empty">
           {planned.length === 0
             ? `${routine.name} no tiene ejercicios todavía. Editá la rutina en Rutinas.`
@@ -249,12 +238,12 @@ export default function Sesion() {
                     type="button"
                     className={styles.exHead}
                     onClick={() =>
-                        setExpanded((prev) =>
-                          prev.includes(ex.id)
-                            ? prev.filter((id) => id !== ex.id)
-                            : [...prev, ex.id]
-                        )
-                      }
+                      setExpanded((prev) =>
+                        prev.includes(ex.id)
+                          ? prev.filter((id) => id !== ex.id)
+                          : [...prev, ex.id]
+                      )
+                    }
                     aria-expanded={open}
                   >
                     <div>
@@ -277,11 +266,7 @@ export default function Sesion() {
                         <button
                           type="button"
                           className={`${styles.check} ${set.completed ? styles.checkOn : ''}`}
-                          onClick={() => {
-                            const next = !set.completed
-                            patchSet(exIndex, setIndex, { completed: next })
-                            if (next && template.restSec) restStart(template.restSec)
-                          }}
+                          onClick={() => completeSet(exIndex, setIndex, template, !set.completed)}
                           aria-label={`Serie ${setIndex + 1}: marcar como completada`}
                         >
                           {set.completed && <IconCheck />}
@@ -302,24 +287,21 @@ export default function Sesion() {
                             value={set.repsPerformed}
                             onChange={(v) => patchSet(exIndex, setIndex, { repsPerformed: v })}
                             onType={(v) => {
-                              if (!set.completed && v > 0) {
-                                patchSet(exIndex, setIndex, { completed: true })
-                                if (template.restSec) restStart(template.restSec)
-                              }
+                              if (!set.completed && v > 0) completeSet(exIndex, setIndex, template, true)
                             }}
                             min={0}
                             max={99}
                             step={1}
                           />
-<NumberField
-                              label="Peso kg"
-                              value={set.weightUsed}
-                              onChange={(v) => patchSet(exIndex, setIndex, { weightUsed: v })}
-                              min={0}
-                              max={99999}
-                              step={2.5}
-                              unit="kg"
-                            />
+                          <NumberField
+                            label="Peso kg"
+                            value={set.weightUsed}
+                            onChange={(v) => patchSet(exIndex, setIndex, { weightUsed: v })}
+                            min={0}
+                            max={99999}
+                            step={2.5}
+                            unit="kg"
+                          />
                         </div>
                       </div>
                     ))}

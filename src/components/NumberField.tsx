@@ -29,10 +29,17 @@ export default function NumberField({
     setText(fmt(value))
   }, [value])
 
+  function stepDecimals(): number {
+    return Math.max(String(step).split('.')[1]?.length ?? 0, 1)
+  }
+
+  function snap(n: number, decimals: number): number {
+    return Math.round(n * Math.pow(10, decimals)) / Math.pow(10, decimals)
+  }
+
   function fmt(v: number): string {
-    const decimals = Math.max(String(step).split('.')[1]?.length ?? 0, 1)
-    const snapped = Math.round(v * Math.pow(10, decimals)) / Math.pow(10, decimals)
-    return snapped.toFixed(decimals).replace(/\.0+$/, '')
+    const decimals = stepDecimals()
+    return snap(v, decimals).toFixed(decimals).replace(/\.0+$/, '')
   }
 
   function commit() {
@@ -41,8 +48,8 @@ export default function NumberField({
       setText(fmt(value))
       return
     }
-    const decimals = Math.max(String(step).split('.')[1]?.length ?? 0, 1)
-    let next = Math.round(n * Math.pow(10, decimals)) / Math.pow(10, decimals)
+    const decimals = stepDecimals()
+    let next = snap(n, decimals)
     if (next < min) next = min
     if (next > max) next = max
     if (next !== value) onChange(next)

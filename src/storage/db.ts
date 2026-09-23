@@ -1,4 +1,4 @@
-import type { ExerciseTemplate, LibraryExercise, Profile, Routine, WorkoutLog } from '../types'
+import type { ExerciseTemplate, LibraryExercise, Profile, Routine, SetRecord, WorkoutLog } from '../types'
 
 const ROUTINES_KEY = 'bitacora.routines.v1'
 const LOGS_KEY = 'bitacora.logs.v1'
@@ -76,16 +76,10 @@ export function saveLibrary(library: LibraryExercise[]): void {
   write(LIBRARY_KEY, library)
 }
 
-export interface SessionDraftSet {
-  repsPerformed: number
-  weightUsed: number
-  completed: boolean
-}
-
 export interface SessionDraftExercise {
   id: string
   name: string
-  sets: SessionDraftSet[]
+  sets: SetRecord[]
 }
 
 export interface SessionDraft {

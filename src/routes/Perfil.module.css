@@ -163,6 +163,22 @@
   background: var(--bg-subtle);
 }
 
+.themeCard {
+  margin: 16px 0;
+  border: 1px solid var(--line-strong);
+  padding: 14px 12px;
+}
+
+.themeCard .kicker {
+  margin-bottom: 10px;
+}
+
+.themeHint {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
 .footer {
   padding: 8px 0 16px;
   display: flex;

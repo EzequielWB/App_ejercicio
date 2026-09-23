@@ -8,10 +8,13 @@ import '@fontsource/montserrat/latin-600.css'
 import '@fontsource/montserrat/latin-700.css'
 import App from './App'
 import { StoreProvider } from './state/useStore'
+import { applyTheme, getTheme } from './lib/theme'
 import './styles/tokens.css'
 import './styles/global.css'
 
 registerSW({ immediate: true })
+
+applyTheme(getTheme())
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -3,6 +3,8 @@ import type { FormEvent } from 'react'
 import NumberField from '../components/NumberField'
 import { useStore } from '../state/useStore'
 import { formatWeight } from '../utils'
+import { getTheme, setTheme } from '../lib/theme'
+import type { Theme } from '../lib/theme'
 import { ACTIVITY_LABELS, calorieTargets } from '../nutrition'
 import type { ActivityLevel, Profile, Sex } from '../types'
 import styles from './Perfil.module.css'
@@ -35,6 +37,7 @@ export default function Perfil() {
   const [activity, setActivity] = useState<ActivityLevel>(state.profile.activity)
   const [saved, setSaved] = useState(false)
   const [confirmReset, setConfirmReset] = useState(false)
+  const [theme, setThemeState] = useState<Theme>(() => getTheme())
 
   const [aiText, setAiText] = useState('')
   const [aiBusy, setAiBusy] = useState(false)
@@ -415,6 +418,33 @@ export default function Perfil() {
               )}
             </div>
           )}
+        </section>
+
+        <section className={styles.themeCard}>
+          <span className="kicker">Apariencia</span>
+          <div className="seg">
+            <button
+              type="button"
+              className={theme === 'light' ? 'on' : ''}
+              onClick={() => {
+                setTheme('light')
+                setThemeState('light')
+              }}
+            >
+              Claro
+            </button>
+            <button
+              type="button"
+              className={theme === 'dark' ? 'on' : ''}
+              onClick={() => {
+                setTheme('dark')
+                setThemeState('dark')
+              }}
+            >
+              Oscuro
+            </button>
+          </div>
+          <p className={styles.themeHint}>Se guarda en este dispositivo.</p>
         </section>
 
         <div className={styles.footer}>
